@@ -8,11 +8,12 @@
 #include <math.h> // for cos() and sin()
 #include <vector>
 #include <iostream>
+#include <stdlib.h> // for exit()
 
 // create matrix type (2D vector)
 using matrix_t = std::vector<std::vector<double>>;
 
-//========== Functions ==========//
+//========== Matrix Operations ==========//
 // Printing function for debugging matrix calculations
 void printMatrix(matrix_t matrix)
 {
@@ -34,6 +35,45 @@ void printMatrix(matrix_t matrix)
     }
 }
 
+// Multiply two matrices together
+matrix_t matMult(matrix_t matrix1, matrix_t matrix2)
+{
+    // Check that matrix inner dimensions are appropriate, if not exit and throw
+    // an error
+    if (matrix1.at(0).size() != matrix2.size())
+    {
+        std::cerr << "Matrix dimensions do not match for multiplication\n";
+        std::cerr << "Should be of the form: (a x n) * (n x b)\n";
+        exit(1);
+    }
+
+    int r1 = matrix1.size();
+    int n = matrix1.at(0).size();
+    int c2 = matrix2.at(0).size();
+
+    std::vector<std::vector<double>> result;
+    result.resize(r1);
+
+    double element_sum;
+    for (int i = 0; i < r1; ++i)
+    {
+        for (int j = 0; j < c2; ++j)
+        {
+            element_sum = 0;
+
+            for (int k = 0; k < n; ++k)
+            {
+                element_sum += matrix1.at(i).at(k)*matrix2.at(k).at(j);
+            }
+
+            result.at(i).push_back(element_sum);
+        }
+    }
+
+    return result;
+}
+
+//========== Rotations ==========//
 // Rotation around X Axis
 // Input: theta in radians
 // Output: 3x3 vector of doubles

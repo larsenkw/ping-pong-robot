@@ -3,18 +3,18 @@
 // Must compile 'constants.cpp' with the inclusion of this file
 
 // namespace for frequently used constant values
-namespace Constants
+namespace constants
 {
     // Mathematical Constants
-    extern const double pi;
-    extern const double e;
+    extern const double PI;
+    extern const double E;
 
     // Physical Constants
-    extern const double gravity; // on earth (m/s^2)
-    extern const double c_light; // speed of light (m/s)
-    extern const double c_sound; // speed of sound (m/s dry air, 20*C)
-    extern const double R_gas; // gas constant (J/(mol*K))
-    extern const double avogadro; // (mol^(-1))
+    extern const double GRAVITY; // on earth (m/s^2)
+    extern const double C_LIGHT; // speed of light (m/s)
+    extern const double C_SOUND; // speed of sound (m/s dry air, 20*C)
+    extern const double R_GAS; // gas constant (J/(mol*K))
+    extern const double AVOGADRO; // (mol^(-1))
 }
 
 #endif
