@@ -5,10 +5,11 @@
   This module contains functions for performing rotations for robotics.  This includes the single rotation in the X, Y, and Z axes, ZYZ and RPY rotations sets and representation in Quaternion and Twist space.
 */
 
-#include <math.h> // for cos() and sin()
+#include <math.h> // for cos(), sin(), atan2()
 #include <vector>
 #include <iostream>
 #include <stdlib.h> // for exit()
+#include "constants.h" // for PI
 
 // create matrix type (2D vector)
 using matrix_t = std::vector<std::vector<double>>;
@@ -33,6 +34,24 @@ void printMatrix(matrix_t matrix)
             }
         }
     }
+}
+
+// Printing function for debugging vectors
+void printVector(std::vector<double> vec)
+{
+    int num_elem = vec.size();
+    for (int i = 0; i < num_elem; ++i){
+        std::cout << vec.at(i) << "\n";
+    }
+}
+
+// Unified printing function
+void printVals(matrix_t matrix){
+    printMatrix(matrix);
+}
+
+void printVals(std::vector<double> vec){
+    printVector(vec);
 }
 
 // Multiply two matrices together
@@ -99,4 +118,44 @@ matrix_t rotZ(double theta)
 {
     matrix_t R = {{cos(theta),-sin(theta),0},{sin(theta),cos(theta),0},{0,0,1}};
     return R;
+}
+
+// Convert rotation matrix to Roll, Pitch, and Yaw angles
+// Input: rotation matrix (3x3)
+// Output: (6x1) vector with elements
+//      Angle between -pi/2 and pi/2
+//      0: roll1, 1: pitch1, 2: yaw1
+//      Angle between pi/2 and 3pi/2
+//      3: roll2, 4: pitch2, 5: yaw2
+std::vector<double> rot2RPY(matrix_t R)
+{
+    std::vector<double> angles(6);
+
+    double roll1, roll2, pitch1, pitch2, yaw1, yaw2;
+
+    // Case where pitch is within range (-pi/2,pi/2)
+    roll1 = atan2(R.at(1).at(0), R.at(0).at(0));
+    pitch1 = atan2(-R.at(2).at(0), sqrt(pow(R.at(2).at(1),2) + pow(R.at(2).at(2),2)));
+    yaw1 = atan2(R.at(2).at(1), R.at(2).at(2));
+
+    // Case where pitch is within range (pi/2,3pi/2)
+    roll2 = atan2(-R.at(1).at(0), -R.at(0).at(0));
+    pitch2 = atan2(-R.at(2).at(0), -sqrt(pow(R.at(2).at(1),2) + pow(R.at(2).at(2),2)));
+    yaw2 = atan2(-R.at(2).at(1), -R.at(2).at(2));
+
+    if (pitch1 == constants::PI/2){
+        roll1 = atan2(R.at(1).at(2), R.at(0).at(2));
+        roll2 = atan2(R.at(1).at(2), R.at(0).at(2));
+        yaw1 = 0;
+        yaw2 = 0;
+    }
+
+    angles.at(0) = roll1;
+    angles.at(1) = pitch1;
+    angles.at(2) = yaw1;
+    angles.at(3) = roll2;
+    angles.at(4) = pitch2;
+    angles.at(5) = yaw2;
+
+    return angles;
 }
