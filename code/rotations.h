@@ -44,4 +44,10 @@ matrix_t rotZ(double theta);
 //      3: roll2, 4: pitch2, 5: yaw2
 std::vector<double> rot2RPY(matrix_t R);
 
+// Convert rotation matrix to Z0,Y,Z1 Euler angles
+// Input: rotation matrix (3x3)
+// Output: (3x1) vector with elements
+//      0: z0, 1: y, 2: z1
+std::vector<double> rot2ZYZ(matrix_t R);
+
 #endif

@@ -58,12 +58,13 @@ int main()
     cout << endl;
 
     //----- Test rot2RPY()
+    cout << "Testing 'rot2RPY'\n";
     // Identity matrix
     // first set of angles are 0
     // second set of angles are -pi
     std::vector<double> angles1;
-    matrix_t R1 = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
-    angles1 = rot2RPY(R1);
+    matrix_t I3 = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    angles1 = rot2RPY(I3);
     cout << "First angles: " << endl;
     printVals(angles1);
     cout << endl;
@@ -81,6 +82,30 @@ int main()
     angles2 = rot2RPY(R2);
     cout << "Second angles: " << endl;
     printVals(angles2);
+    cout << endl;
+
+    //----- Test rot2ZYZ()
+    cout << "Testing 'rot2ZYZ'\n";
+    // Identity matrix
+    // angles are all 0
+    std::vector<double> angles3;
+    angles3 = rot2ZYZ(I3);
+    cout << "First angles: \n";
+    printVals(angles3);
+    cout << endl;
+
+    // Matrix:
+    // {0.103846565151668,   0.864780102737098,   0.491295496433882;
+    //  0.422918571742548,  -0.485478460963668,   0.765147401234293;
+    //  0.900197629735517,   0.128320060202457,  -0.416146836547142}
+    // z0 = 1, y = 2, z1 = 3
+    std::vector<double> angles4;
+    matrix_t R3 = {{0.103846565151668, 0.864780102737098, 0.491295496433882},
+                   {0.422918571742548,-0.485478460963668, 0.765147401234293},
+                   {0.900197629735517, 0.128320060202457,-0.416146836547142}};
+    angles4 = rot2ZYZ(R3);
+    cout << "Second angles: \n";
+    printVals(angles4);
     cout << endl;
 
     return 0;

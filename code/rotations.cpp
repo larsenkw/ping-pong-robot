@@ -159,3 +159,40 @@ std::vector<double> rot2RPY(matrix_t R)
 
     return angles;
 }
+
+// Convert rotation matrix to Z0,Y,Z1 Euler angles
+// Input: rotation matrix (3x3)
+// Output: (3x1) vector with elements
+//      0: z0, 1: y, 2: z1
+std::vector<double> rot2ZYZ(matrix_t R)
+{
+    std::vector<double> angles(3);
+
+    double z0, y, z1;
+
+    // Determine y
+    y = acos(R.at(2).at(2));
+
+    // If y = 0
+    if (y == 0){
+        z0 = atan2(R.at(1).at(0), R.at(1).at(1));
+        z1 = 0;
+    }
+
+    // if y = pi
+    else if (y == -constants::PI){
+        z0 = -atan2(R.at(1).at(0), R.at(1).at(1));
+        z1 = 0;
+    }
+
+    else {
+        z0 = atan2(R.at(1).at(2), R.at(0).at(2));
+        z1 = atan2(R.at(2).at(1), -R.at(2).at(0));
+    }
+
+    angles.at(0) = z0;
+    angles.at(1) = y;
+    angles.at(2) = z1;
+
+    return angles;
+}
